@@ -27,7 +27,7 @@ Has lower community.
 MIT license.
 
 ## redigo
-([docs]https://godoc.org/github.com/gomodule/redigo/redis)
+[docs](https://godoc.org/github.com/gomodule/redigo/redis)
 
 Has smallest feature list comparing to previous ones.
 Implements A Print-like API with support for all Redis commands.
