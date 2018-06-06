@@ -13,11 +13,19 @@ func main() {
 	}
 	defer c.Close()
 
-	ret, err := c.Do("SELECT","0")
+	ret, err := c.Do("SELECT","2")
 	if (err != nil){
 		log.Fatalf("Error on SELECT:: %v\n", err)
 	} else {
-		fmt.Printf("Select db 0: %s\n", ret)
+		fmt.Printf("Select db 2: %s\n", ret)
+	}
+
+	ret, err = c.Do("FLUSHDB")
+
+	if (err != nil){
+		log.Fatalf("Error on FLUSHDB:: %v\n", err)
+	} else {
+		fmt.Printf("FLUSHDB: %s\n", ret)
 	}
 
 	ret, _ = c.Do("SET","food", "banana")
@@ -37,7 +45,8 @@ func main() {
 
 	values, err := redis.Strings(c.Do("MGET", "black", "red", "green", "food"))
 	if err != nil {
-		// handle error
+		log.Fatalf("Error on MGET:: %v\n", err)
+
 	} else{
 		for _, v := range values {
 			fmt.Println(v)
@@ -51,5 +60,25 @@ func main() {
 	} else {
 		fmt.Printf("del %v\n", ret)
 	}
+
+	fmt.Println("\n test HMSET")
+	m := map[string]string{
+		"title":  "Example2",
+		"author": "Steve",
+		"body":   "Map",
+	}
+
+	ret, err = c.Do("HMSET", redis.Args{}.Add("myhash").AddFlat(m)...)
+
+	values, err = redis.Strings(c.Do("HGETALL", "myhash"))
+	if err != nil {
+		panic(err)
+	} else {
+		for _, v := range values {
+			fmt.Println(v)
+		}
+	}
+
+
 
 }

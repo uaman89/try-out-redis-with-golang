@@ -18,7 +18,12 @@ func main() {
 	//	fmt.Println("Auth error %s", err);
 	//}
 
-	_, err = client.Cmd("GET", "foo").Str()
+	_, err = client.Cmd("SELECT", "1").Str()
+	if err != nil {
+		fmt.Println(`Error %s`, err);
+	}
+
+	_, err = client.Cmd("GET", "radix-foo").Str()
 	if err != nil {
 		fmt.Println(`Error %s`, err);
 	}
@@ -73,10 +78,10 @@ func main() {
 	// list. For example, the following are all equivalent:
 	//
 	client.Cmd("HMSET", "myhash", "key1", "val1", "key2", "val2")
-	client.Cmd("HMSET", "myhash", []string{"key1", "val1", "key2", "val2"})
+	client.Cmd("HMSET", "myhash", []string{"key3", "val3", "key4", "val4"})
 	client.Cmd("HMSET", "myhash", map[string]string{
-		"key1": "val1",
-		"key2": "val2",
+		"key5": "val5",
+		"key6": "val6",
 	})
 	client.Cmd("HMSET", "myhash", [][]string{
 		[]string{"key1", "val1"},

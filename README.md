@@ -31,7 +31,7 @@ MIT license.
 
 Has smallest feature list comparing to previous ones.
 Implements A Print-like API with support for all Redis commands.
-Has no supporting []redis sentinel](https://redis.io/topics/sentinel)
+Has no supporting [redis sentinel](https://redis.io/topics/sentinel)
 
 ## Examples
 Simple examples of usage:
