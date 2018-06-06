@@ -1,3 +1,6 @@
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+//
 package main
 
 import (
@@ -11,14 +14,33 @@ func main(){
 	client = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set
-		DB:       0,  // use default DB
+		DB:       1,  // use default DB
 	})
 
 	pong, err := client.Ping().Result()
 	fmt.Println(pong, err)
 
+	testSetGet()
 	testScan()
 	tesMGet()
+	testHashMap()
+}
+
+func testSetGet(){
+	fmt.Println("\n- testSetGet() -");
+
+	fmt.Printf("try set someValue := 100500\n")
+
+	client.Set("someValue", "100500", 0);
+
+	val, err := client.Get("someValue").Result();
+	if err != nil {
+		panic(err)
+	} else{
+			fmt.Printf("got value: %s", val)
+	}
+
+	fmt.Println("\n- end testSetGet() -");
 }
 
 func tesMGet(){
@@ -31,10 +53,11 @@ func tesMGet(){
 		}
 
 	}
-
 }
 
 func testScan(){
+	fmt.Println("\n- testScan() -");
+
 	client.FlushDB()
 	for i := 0; i < 33; i++ {
 		err := client.Set(fmt.Sprintf("key%d", i), "value", 0).Err()
@@ -61,4 +84,23 @@ func testScan(){
 	}
 
 	fmt.Printf("found %d keys. scanned %d times\n", n, c)
+}
+
+func testHashMap(){
+	fmt.Println("\n- testHashMap() -");
+
+	m := map[string]interface{}{"three": 3, "four": 4, "two": 2}
+	client.HMSet("myHashMap", m);
+
+	values, err := client.HMGet("myHashMap", "four", "two", "non-exist").Result();
+
+	if err != nil {
+		panic(err)
+	}
+
+	for _, val := range values{
+		fmt.Printf("value: %v;\n",val)
+	}
+
+	fmt.Println("- end testHashMap() -");
 }
